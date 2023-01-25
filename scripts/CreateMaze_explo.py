@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 import random
-from pynput import keyboard
+# from pynput import keyboard
 # import tkinter
 
 SIZE = 77
@@ -22,8 +22,8 @@ class CreateMaze():
         self.maze_initialize()
         self.CCSP()
 
-        self.monitor = MonKeyBoard()
-        self.monitor.start()
+        # self.monitor = MonKeyBoard()
+        # self.monitor.start()
 
         self.loop()
 
@@ -168,9 +168,10 @@ class CreateMaze():
     def make_goal(self):
         self.maze[self.height - 2][self.width - 2] = 3
 
-    def move(self, data):
-        # keys = input()
-        status = self.monitor.getstatus()
+    def move(self, status):
+        # # keys = input()
+        # status = self.monitor.getstatus()
+        status = None
         # print(status)
         if status == "right":
             if not self.maze[self.pos_x][self.pos_y + 1] == 1:
@@ -197,13 +198,19 @@ class CreateMaze():
                 self.pos_x += 1
                 self.maze[self.pos_x][self.pos_y] = 4
 
+        # self.make_start()
+        # self.make_goal()
+        # img = self.maze
+        # plt.imshow(img)
+
+        # self.monitor.listener = None
+        # print(status)
+
+    def explo(self, data):
         self.make_start()
         self.make_goal()
         img = self.maze
         plt.imshow(img)
-
-        # self.monitor.listener = None
-        # print(status)
 
     def draw_maze(self):
         self.make_start()
@@ -212,73 +219,10 @@ class CreateMaze():
         fig = plt.figure("Maze")
         # img = self.maze
 
-        ani = animation.FuncAnimation(fig, self.move, interval = 100)
+        ani = animation.FuncAnimation(fig, self.explo, interval = 100)
 
         # plt.imshow(img)
         plt.show()
-
-class MonKeyBoard:
-    def on_press(self,key):
-        try:
-            # print('press: {}\n'.format(key.char))
-            # print('release: {}'.format(key))
-            if( key == keyboard.Key.up):
-                # print("up")
-                # self.listener.stop()
-                self.listener = "up"
-            if( key == keyboard.Key.down):
-                # print("up")
-                # self.listener.stop()
-                self.listener = "down"
-            if( key == keyboard.Key.left):
-                # print("up")
-                # self.listener.stop()
-                self.listener = "left"
-            if( key == keyboard.Key.right):
-                # print("up")
-                # self.listener.stop()
-                self.listener = "right"
-            # pass
-        except AttributeError:
-            print('spkey press: {}'.format(key))
-    
-    def on_release(self,key):
-        # print('release: {}'.format(key))
-        # if( key == keyboard.Key.up):
-        #     # print("up")
-        #     # self.listener.stop()
-        #     self.listener = "up"
-        # if( key == keyboard.Key.down):
-        #     # print("up")
-        #     # self.listener.stop()
-        #     self.listener = "down"
-        # if( key == keyboard.Key.left):
-        #     # print("up")
-        #     # self.listener.stop()
-        #     self.listener = "left"
-        # if( key == keyboard.Key.right):
-        #     # print("up")
-        #     # self.listener.stop()
-        #     self.listener = "right"
-        # print(key)
-        if( key == keyboard.Key.esc):
-            print("StopKey")
-            self.listener.stop()
-            self.listener = None
-            
-    def start(self):
-        self.listener = keyboard.Listener(on_press=self.on_press,on_release=self.on_release)
-        self.listener.start()
-        
-    def getstatus(self):
-        # if(self.listener == "up"):
-        #     return self.listener
-        if(self.listener == None):
-            return False       
-        else:
-            return self.listener
-        # return True
-
 
 if __name__ == '__main__':
     create_maze = CreateMaze()
